@@ -1,0 +1,516 @@
+<title>noponopo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: 白地にたっぷりの余白、太いゴシックの見出し、1色のアクセント。ヒーローは「お手元の資料 → 納品」の図で何屋か一目で分かるように */
+:root{--bg:#FFFFFF;--fg:#0B1220;--mute:#5B6472;--line:#E6E9EF;--soft:#F5F7FA;--navy:#0E1F3D;--navy-ink:#FFFFFF;--accent:#2F6FED;--accent-soft:#E8F0FF;--accent-ink:#FFFFFF;--shadow:0 10px 30px rgba(11,18,32,.08);
+ --sans:"Noto Sans JP","Hiragino Sans",system-ui,sans-serif;--num:"Inter","Noto Sans JP",sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F141C;--fg:#E9EDF3;--mute:#9AA4B2;--line:#263040;--soft:#161C26;--navy:#0A1529;--navy-ink:#F3F6FA;--accent:#6D9CFF;--accent-soft:#182742;--accent-ink:#0A1529;--shadow:0 10px 30px rgba(0,0,0,.35);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F141C;--fg:#E9EDF3;--mute:#9AA4B2;--line:#263040;--soft:#161C26;--navy:#0A1529;--navy-ink:#F3F6FA;--accent:#6D9CFF;--accent-soft:#182742;--accent-ink:#0A1529;--shadow:0 10px 30px rgba(0,0,0,.35);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.85;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.band{margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1120px;margin:0 auto}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.3}
+h1{font-size:clamp(32px,4.8vw,54px);font-weight:900;letter-spacing:-.01em;line-height:1.25}
+h2{font-size:clamp(26px,3.4vw,36px);font-weight:900;letter-spacing:-.005em}
+h3{font-size:18px;font-weight:700}
+p{margin:0 0 14px;max-width:42em}
+a{color:var(--accent)}
+.mute{color:var(--mute)}
+.eyebrow{font-family:var(--num);font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:12px}
+.sec{padding-block:96px 0}
+.sec>.wrap>p.lead{font-size:17px;color:var(--mute);margin:16px 0 40px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font-weight:700;text-decoration:none;font-size:15px;border:1.5px solid transparent;cursor:pointer;font-family:inherit;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.p{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 20px rgba(47,111,237,.25)}
+.btn.o{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn.o:hover{border-color:var(--fg)}
+svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:22px;padding-block:14px}
+.logo{font-family:var(--num);font-weight:700;font-size:21px;letter-spacing:-.01em;color:var(--fg);text-decoration:none}
+.logo b{color:var(--accent)}
+.top nav{display:flex;gap:22px;margin-left:auto}
+.top nav a{color:var(--fg);text-decoration:none;font-size:14px;font-weight:500;opacity:.85}
+.top nav a:hover{opacity:1;color:var(--accent)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{background:transparent;border:0;padding:5px 12px;font:inherit;font-size:12.5px;cursor:pointer;color:var(--fg)}
+.lang button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.top .btn{padding:10px 18px;font-size:14px}
+/* hero */
+.hero{position:relative;padding-block:88px 72px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(900px 500px at 85% 0%,var(--accent-soft),transparent 60%);pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero p{font-size:17px;color:var(--mute);margin:22px 0 0;max-width:30em}
+.hero .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+.hero .meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:28px;font-size:13.5px;color:var(--mute)}
+.hero .meta span{display:inline-flex;align-items:center;gap:6px}
+.hero .meta svg{width:16px;height:16px;color:var(--accent)}
+/* transform panel */
+.xf{background:var(--bg);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:26px;min-width:0}
+.xf .cols{display:grid;grid-template-columns:1fr 40px 1fr;gap:12px;align-items:center}
+.xf .col h4{margin:0 0 10px;font-family:var(--num);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);font-weight:600}
+.doc{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:var(--soft);font-size:13.5px;min-width:0}
+.doc svg{width:18px;height:18px;color:var(--mute);flex:none}
+.doc b{display:block;font-weight:700;line-height:1.3}
+.doc small{color:var(--mute);font-family:var(--num);font-size:11px}
+.doc.to{background:var(--accent-soft);border-color:transparent}
+.doc.to svg{color:var(--accent)}
+.xf .cols{align-items:start}.xf .arrow{align-self:center}
+h1 .nb{display:inline-block}
+.xf .arrow{display:flex;align-items:center;justify-content:center;color:var(--accent)}
+.xf .arrow svg{width:28px;height:28px}
+.xf .flow{margin-top:18px;border-top:1px solid var(--line);padding-top:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--mute)}
+.xf .flow i{font-style:normal;background:var(--soft);border-radius:999px;padding:3px 10px;font-weight:500;color:var(--fg)}
+.xf .flow i.ai{background:var(--accent-soft);color:var(--accent)}
+/* facts */
+.facts{border-block:1px solid var(--line)}
+.facts .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.facts .wrap>div{padding:26px 22px;border-right:1px solid var(--line);min-width:0;display:flex;gap:14px;align-items:flex-start}
+.facts .wrap>div>div{min-width:0}
+.facts .wrap>div:last-child{border-right:0}
+.facts svg{color:var(--accent);margin-top:3px}
+.facts b{display:block;font-size:16px}.facts span{font-size:13.5px;color:var(--mute);line-height:1.6;display:block}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{border:1px solid var(--line);border-radius:16px;padding:26px;min-width:0;background:var(--bg);transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.card .ic{width:46px;height:46px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-bottom:16px}
+.card h3{margin-bottom:8px}
+.card p{font-size:14.5px;color:var(--mute);margin-bottom:12px}
+.card ul{margin:0;padding:0;list-style:none;font-size:14px}
+.card ul li{padding-left:18px;position:relative;margin-bottom:4px}
+.card ul li::before{content:"";position:absolute;left:0;top:.72em;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+/* process */
+.proc{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;position:relative}
+.proc::before{content:"";position:absolute;left:4%;right:4%;top:22px;height:2px;background:var(--line)}
+.proc div{position:relative;min-width:0}
+.proc .n{width:44px;height:44px;border-radius:50%;background:var(--bg);border:2px solid var(--line);display:grid;place-items:center;font-family:var(--num);font-weight:700;font-size:14px;color:var(--mute);margin-bottom:14px;position:relative}
+.proc .n.h{border-color:var(--accent);color:var(--accent)}
+.proc b{display:block;font-size:15px;margin-bottom:4px}
+.proc span{font-size:13px;color:var(--mute);display:block;line-height:1.6}
+.tag{display:inline-block;font-family:var(--num);font-size:10.5px;font-weight:600;letter-spacing:.08em;padding:2px 8px;border-radius:999px;background:var(--soft);color:var(--mute);margin-bottom:6px}
+.tag.ai{background:var(--accent-soft);color:var(--accent)}
+.promise{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:48px}
+.promise div{background:var(--soft);border-radius:16px;padding:28px;min-width:0}
+.promise h3{font-size:19px;margin-bottom:10px}
+.promise p{font-size:14.5px;color:var(--mute);margin:0}
+/* security tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.tile{border:1px solid var(--line);border-radius:16px;padding:24px;min-width:0}
+.tile svg{color:var(--accent);margin-bottom:12px;width:26px;height:26px}
+.tile b{display:block;font-size:15.5px;margin-bottom:6px}
+.tile span{font-size:13.5px;color:var(--mute);line-height:1.65;display:block}
+/* pricing */
+.pbox{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-top:22px}
+.pbox h3{padding:16px 22px;background:var(--soft);border-bottom:1px solid var(--line);font-size:16px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px;line-height:1.6}
+th,td{text-align:left;vertical-align:top;padding:13px 22px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+thead th{font-weight:500;color:var(--mute);font-size:12.5px;white-space:nowrap}
+td.n{white-space:nowrap;font-family:var(--num);font-variant-numeric:tabular-nums}
+td.price{white-space:nowrap;font-family:var(--num);font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums}
+td small{display:block;color:var(--mute);font-size:12.5px;margin-top:2px}
+.ex{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:22px}
+.ex>div{border-radius:16px;padding:26px;min-width:0}
+.ex .calc{background:var(--navy);color:var(--navy-ink)}
+.ex .calc h3{font-size:16px;margin-bottom:14px;opacity:.9}
+.ex .calc dl{display:grid;grid-template-columns:1fr auto;gap:8px 20px;margin:0;font-size:14px}
+.ex .calc dd{margin:0;font-family:var(--num);font-weight:500;white-space:nowrap}
+.ex .calc .tot{border-top:1px solid rgba(255,255,255,.25);margin-top:10px;padding-top:12px;font-weight:700}
+.ex .calc .tot dd{font-size:18px}
+.ex .terms{background:var(--soft)}
+.ex .terms ul{margin:0;padding-left:1.1em;font-size:14px}
+.ex .terms li{margin-bottom:6px}
+/* languages */
+.langs{display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;list-style:none}
+.langs li{border:1px solid var(--line);border-radius:999px;padding:7px 16px;font-size:14px}
+/* company */
+.co{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.co th{width:26%;color:var(--mute);font-weight:500;background:var(--soft)}
+.todo{background:#FFE88A;color:#0B1220;padding:0 8px;border-radius:4px;font-size:12.5px}
+/* contact */
+.quote{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.fcard{border:1px solid var(--line);border-radius:16px;padding:26px;box-shadow:var(--shadow);min-width:0}
+form{display:grid;gap:14px}
+label{display:grid;gap:4px;font-size:13.5px;font-weight:500}
+input,select,textarea{font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 13px;width:100%;min-width:0}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+textarea{min-height:84px;resize:vertical}
+.out{background:var(--navy);color:var(--navy-ink);border-radius:16px;padding:26px;min-width:0;align-self:start}
+.out .eyebrow{color:var(--navy-ink);opacity:.7}
+.out pre{white-space:pre-wrap;word-break:break-word;font:inherit;font-size:13.5px;line-height:1.7;margin:0 0 16px;opacity:.95}
+.out code{font-family:var(--num);font-size:15px;font-weight:600;user-select:all;background:rgba(255,255,255,.1);padding:3px 10px;border-radius:6px}
+.out .btn{background:#FFF;color:var(--navy);margin-top:14px}
+.status{font-size:13px;opacity:.8;min-height:1.5em;margin-top:8px}
+/* faq */
+.faq{max-width:46em}
+details{border-bottom:1px solid var(--line);padding-block:16px}
+summary{cursor:pointer;font-weight:700;font-size:15.5px;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center}
+summary::after{content:"+";font-family:var(--num);font-size:20px;color:var(--accent);flex:none}
+details[open] summary::after{content:"−"}
+details p{margin:10px 0 0;font-size:14.5px;color:var(--mute)}
+/* cta band & footer */
+.ctab{margin-top:96px;background:var(--navy);color:var(--navy-ink);padding-block:64px}
+.ctab .wrap{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.ctab h2{font-size:clamp(22px,3vw,30px)}
+.ctab p{opacity:.8;margin:8px 0 0}
+.ctab .btn{background:#FFF;color:var(--navy)}
+footer{background:var(--navy);color:var(--navy-ink);padding-block:28px 56px;font-size:13px;border-top:1px solid rgba(255,255,255,.12)}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;opacity:.8}
+footer a{color:var(--navy-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:1000px){.hero .wrap{grid-template-columns:1fr;gap:36px}.cards{grid-template-columns:1fr 1fr}.proc{grid-template-columns:repeat(3,1fr)}.proc::before{display:none}.facts .wrap{grid-template-columns:1fr 1fr}.facts .wrap>div:nth-child(2){border-right:0}.facts .wrap>div:nth-child(-n+2){border-bottom:1px solid var(--line)}.tiles{grid-template-columns:1fr 1fr}.quote,.promise,.ex{grid-template-columns:1fr}.top nav{display:none}}
+@media (max-width:620px){.cards,.proc,.tiles,.facts .wrap{grid-template-columns:1fr}.facts .wrap>div{border-right:0;border-bottom:1px solid var(--line)}.sec{padding-block:64px 0}.hero{padding-block:56px 48px}th,td{padding:11px 14px}table{font-size:13.5px}.xf{padding:18px}.xf .cols{grid-template-columns:1fr}.xf .arrow svg{transform:rotate(90deg)}.top .btn{display:none}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+<symbol id="i-lang" viewBox="0 0 24 24"><path d="M4 5h8M8 3v2M11 5c-1 4-3.5 7-7 9M6 8c1.5 3 4 5 7 6"/><path d="M13 21l4-10 4 10M14.5 17.5h5"/></symbol>
+<symbol id="i-cad" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18M14 14h4M14 17h4"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4zM20 4h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7z"/></symbol>
+<symbol id="i-loop" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+<symbol id="i-sign" viewBox="0 0 24 24"><path d="M4 20h16M6 16l10-10 2 2-10 10H6z"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
+</defs></svg>
+
+<header class="top band">
+  <div class="wrap">
+    <a class="logo" href="#top">nopo<b>nopo</b></a>
+    <nav>
+      <a href="#services" data-t="n1">サービス</a><a href="#process" data-t="n2">品質管理</a><a href="#security" data-t="n3">情報セキュリティ</a><a href="#pricing" data-t="n4">料金</a><a href="#company" data-t="n5">会社概要</a><a href="#faq" data-t="n6">FAQ</a>
+    </nav>
+    <div class="lang"><button type="button" id="ja" aria-pressed="true">日本語</button><button type="button" id="en" aria-pressed="false">EN</button></div>
+    <a class="btn p" href="#contact" data-t="hcta">お見積を依頼</a>
+  </div>
+</header>
+
+<section class="hero band" id="top">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow" data-t="eb">Translation · Digitizing · Video</span>
+      <h1 data-t="h1" data-html="1"><span class="nb">お手元の資料を、</span><span class="nb">必要な言語と形式に。</span></h1>
+      <p data-t="lead">マニュアル、図面、カタログ、動画、書籍。お客様がすでにお持ちの資料をお送りいただくだけで、多言語化・データ化・動画化して納品します。AI による下作業と、ネイティブ翻訳者・専門作業者による確認で、品質と納期を両立します。</p>
+      <div class="btns"><a class="btn p" href="#contact" data-t="cta1">お見積を依頼する <svg class="i" style="width:18px;height:18px"><use href="#i-arrow"/></svg></a><a class="btn o" href="#pricing" data-t="cta2">料金表を見る</a></div>
+      <div class="meta">
+        <span><svg class="i"><use href="#i-check"/></svg><em data-t="m1" style="font-style:normal">お見積は1〜2営業日</em></span>
+        <span><svg class="i"><use href="#i-check"/></svg><em data-t="m2" style="font-style:normal">お試し1ページ無料</em></span>
+        <span><svg class="i"><use href="#i-check"/></svg><em data-t="m3" style="font-style:normal">メールのみで完結</em></span>
+      </div>
+    </div>
+    <div class="xf" aria-label="例">
+      <div class="cols">
+        <div class="col">
+          <h4 data-t="x_in">お手元の資料</h4>
+          <div class="doc"><svg class="i"><use href="#i-doc"/></svg><div><b data-t="x1">安全作業マニュアル</b><small>PDF · 日本語 · 40p</small></div></div>
+          <div class="doc"><svg class="i"><use href="#i-cad"/></svg><div><b data-t="x2">手書きの配置図</b><small>SCAN · 120枚</small></div></div>
+          <div class="doc"><svg class="i"><use href="#i-play"/></svg><div><b data-t="x3">研修スライド</b><small>PPTX · 60枚</small></div></div>
+        </div>
+        <div class="arrow"><svg class="i"><use href="#i-arrow"/></svg></div>
+        <div class="col">
+          <h4 data-t="x_out">納品</h4>
+          <div class="doc to"><svg class="i"><use href="#i-lang"/></svg><div><b data-t="y1">ベトナム語版・インドネシア語版</b><small>PDF + Word · レイアウト調整済</small></div></div>
+          <div class="doc to"><svg class="i"><use href="#i-layers"/></svg><div><b data-t="y2">CAD データ</b><small>DXF · DWG · JWW · レイヤ分け</small></div></div>
+          <div class="doc to"><svg class="i"><use href="#i-globe"/></svg><div><b data-t="y3">ナレーション付き研修動画</b><small>MP4 · 字幕 · 6言語</small></div></div>
+        </div>
+      </div>
+      <div class="flow"><span data-t="fl0">工程</span><i class="ai" data-t="fl1">AI 下作業</i>→<i data-t="fl2">ネイティブ／専門作業者が仕上げ</i>→<i data-t="fl3">別担当が検品</i>→<i data-t="fl4">納品</i></div>
+    </div>
+  </div>
+</section>
+
+<div class="facts band"><div class="wrap">
+  <div><svg class="i"><use href="#i-globe"/></svg><div><b data-t="f1b">15言語</b><span data-t="f1s">各言語のネイティブ翻訳者が全文を確認</span></div></div>
+  <div><svg class="i"><use href="#i-layers"/></svg><div><b data-t="f2b">20以上の納品形式</b><span data-t="f2s">Word・InDesign・CAD・MP4・SRT ほか</span></div></div>
+  <div><svg class="i"><use href="#i-mail"/></svg><div><b data-t="f3b">メールのみ</b><span data-t="f3s">打ち合わせ・電話なしで、受付から納品まで</span></div></div>
+  <div><svg class="i"><use href="#i-eye"/></svg><div><b data-t="f4b">AI の使用を開示</b><span data-t="f4s">工程ごとに、お見積の段階でお知らせ</span></div></div>
+</div></div>
+
+<main class="wrap">
+
+<section class="sec" id="services">
+  <span class="eyebrow">Services</span>
+  <h2 data-t="h_sv">6つのサービス</h2>
+  <p class="lead" data-t="sv_lead">どのサービスも、お客様の資料を起点にします。ゼロから作るのではなく、いまある資料を必要な形に整えるので、短い納期と明確な料金でお受けできます。</p>
+  <div class="cards">
+    <div class="card"><div class="ic"><svg class="i"><use href="#i-lang"/></svg></div><h3 data-t="c1h">多言語化</h3><p data-t="c1p">日本語の資料を外国語へ。外国人スタッフ向けのマニュアル・安全教育資料・就業規則から、輸出向けの製品マニュアル・カタログまで。</p><ul><li data-t="c1l1">AI 下訳 ＋ ネイティブ翻訳者の校正</li><li data-t="c1l2">図の中の文字を含むレイアウト調整</li><li data-t="c1l3">用語集・翻訳メモリの整備</li></ul></div>
+    <div class="card"><div class="ic"><svg class="i"><use href="#i-globe"/></svg></div><h3 data-t="c2h">日本語化</h3><p data-t="c2p">海外製品の取扱説明書、ソフトのヘルプ記事、通販の商品ページ、教育コンテンツを、日本の読み手に合った日本語に。</p><ul><li data-t="c2l1">英語・中国語・韓国語から</li><li data-t="c2l2">日本語ネイティブによる全文校正</li><li data-t="c2l3">動画の字幕・吹替にも対応</li></ul></div>
+    <div class="card"><div class="ic"><svg class="i"><use href="#i-cad"/></svg></div><h3 data-t="c3h">データ化・変換</h3><p data-t="c3p">紙の図面、手書きの帳票、紙カタログ、古い CAD データ、写真、録音を、いま使える形式に。</p><ul><li data-t="c3l1">図面の CAD 化（JWW・DXF・DWG）</li><li data-t="c3l2">帳票・カタログの Excel/CSV 化</li><li data-t="c3l3">3D 化、AR・3D プリント用変換</li></ul></div>
+    <div class="card"><div class="ic"><svg class="i"><use href="#i-play"/></svg></div><h3 data-t="c4h">動画化・音声化</h3><p data-t="c4p">マニュアル・スライド・説明資料から、図解とナレーション付きの動画を制作。社内教育、製品説明、多言語展開に。</p><ul><li data-t="c4l1">資料から台本を起こして制作</li><li data-t="c4l2">AI ナレーション、字幕付き</li><li data-t="c4l3">ウェビナー録画の編集、音声化</li></ul></div>
+    <div class="card"><div class="ic"><svg class="i"><use href="#i-book"/></svg></div><h3 data-t="c5h">作品の海外版</h3><p data-t="c5p">小説・漫画・レシピ本・講座動画・絵本を、海外の読者向けに。翻訳から写植・字幕・音声化まで。</p><ul><li data-t="c5l1">英語・中国語・韓国語・スペイン語ほか</li><li data-t="c5l2">漫画の写植、絵本の文字差し替え</li><li data-t="c5l3">オーディオブック化</li></ul></div>
+    <div class="card"><div class="ic"><svg class="i"><use href="#i-loop"/></svg></div><h3 data-t="c6h">継続対応</h3><p data-t="c6p">初回に用語集と翻訳メモリを作っておくことで、2回目以降は変更箇所だけを単価でお受けします。</p><ul><li data-t="c6l1">マニュアルの改訂</li><li data-t="c6l2">毎月の商品データ・イベント文</li><li data-t="c6l3">動画シリーズの追加制作</li></ul></div>
+  </div>
+</section>
+
+<section class="sec" id="process">
+  <span class="eyebrow">Quality</span>
+  <h2 data-t="h_q">すべての案件を、同じ6つの工程で</h2>
+  <p class="lead" data-t="q_lead">AI が担う工程と、人が確認する工程を分けています。どの工程に AI を使うかは、お見積の段階で開示します。</p>
+  <div class="proc">
+    <div><div class="n">1</div><span class="tag" data-t="tg1">受付</span><b data-t="st1">分量の確認と見積</b><span data-t="st1p">文字数・ページ数・分数を数え、内訳のある見積を提示</span></div>
+    <div><div class="n">2</div><span class="tag" data-t="tg2">準備</span><b data-t="st2">用語の整理</b><span data-t="st2p">お客様の用語集、製品名、過去の訳文を反映</span></div>
+    <div><div class="n">3</div><span class="tag ai">AI</span><b data-t="st3">下作業</b><span data-t="st3p">下訳・文字読み取り・ナレーション。学習に使われない設定で</span></div>
+    <div><div class="n h">4</div><span class="tag" data-t="tg4">人</span><b data-t="st4">仕上げ</b><span data-t="st4p">ネイティブ翻訳者・専門作業者が全文を確認・修正</span></div>
+    <div><div class="n h">5</div><span class="tag" data-t="tg5">人（別担当）</span><b data-t="st5">検品</b><span data-t="st5p">作業者と別の担当者が、原文との照合と形式を確認</span></div>
+    <div><div class="n">6</div><span class="tag" data-t="tg6">納品</span><b data-t="st6">納品と修正</b><span data-t="st6p">検収後1回の無償修正。誤訳は回数に関係なく修正</span></div>
+  </div>
+  <div class="promise">
+    <div><h3 data-t="qc1h">安全に関わる箇所は、必ず人が一文ずつ読みます</h3><p data-t="qc1p">安全教育資料、機械の操作手順、医療・介護の記録など、誤りが事故につながる資料は、AI の出力を使う場合でも該当箇所を人が一文ずつ確認します。</p></div>
+    <div><h3 data-t="qc2h">レイアウトまで、こちらの責任です</h3><p data-t="qc2p">言語によって文字数は1.5倍以上変わります。翻訳とレイアウト調整を分けずに引き受け、図の中の文字やページのはみ出しまで整えて納品します。</p></div>
+  </div>
+</section>
+
+<section class="sec" id="security">
+  <span class="eyebrow">Security</span>
+  <h2 data-t="h_sec">お預かりする資料の扱い</h2>
+  <p class="lead" data-t="sec_lead">資料は本件の作業以外に使わず、実績としての公表もしません。</p>
+  <div class="tiles">
+    <div class="tile"><svg class="i"><use href="#i-lock"/></svg><b data-t="se1b">AI は学習不使用の設定のみ</b><span data-t="se1s">入力データが学習に使われない設定・契約のサービスだけを使います。明文で確認できないサービスは使いません。</span></div>
+    <div class="tile"><svg class="i"><use href="#i-sign"/></svg><b data-t="se2b">作業者と秘密保持契約</b><span data-t="se2s">秘密保持を含む業務委託契約を結び、資料は案件ごとに必要な範囲だけ渡します。</span></div>
+    <div class="tile"><svg class="i"><use href="#i-trash"/></svg><b data-t="se3b">納品後30日で削除</b><span data-t="se3s">お預かりしたデータは、納品から30日後に削除します。ご希望があれば削除の報告をします。</span></div>
+    <div class="tile"><svg class="i"><use href="#i-doc"/></svg><b data-t="se4b">NDA・ご利用条件</b><span data-t="se4s">NDA はお客様の書式でも当方の書式でも締結できます。ご利用条件は、お見積メールに全文を添えます。</span></div>
+  </div>
+</section>
+
+<section class="sec" id="pricing">
+  <span class="eyebrow">Pricing</span>
+  <h2 data-t="h_pr">料金</h2>
+  <p class="lead" data-t="pr_note">税別の単価です。専門性の高い資料や少量のご依頼は上がることがあります。最低ご注文額は30万円（税別）。正確な金額は資料を拝見してお見積りします。</p>
+
+  <div class="pbox"><h3 data-t="t1">多言語化（日本語 → 外国語）</h3><div class="tbl"><table><thead><tr><th data-t="ci">内容</th><th data-t="cu">単位</th><th data-t="cp">単価</th><th data-t="cn">備考</th></tr></thead><tbody>
+    <tr><td data-t="r1">英語・中国語（簡体字／繁体字）・韓国語</td><td class="n" data-t="u1">日本語1文字</td><td class="price">¥9–14</td><td data-t="r1n">AI 下訳＋ネイティブ校正</td></tr>
+    <tr><td data-t="r2">ベトナム語・インドネシア語・タガログ語・ネパール語・ミャンマー語・タイ語</td><td class="n" data-t="u2">日本語1文字</td><td class="price">¥11–16</td><td data-t="r2n">技能実習・特定技能の現場向け。やさしい日本語への書き換えも可</td></tr>
+    <tr><td data-t="r3">スペイン語・ポルトガル語・フランス語・ドイツ語</td><td class="n" data-t="u3">日本語1文字</td><td class="price">¥11–16</td><td></td></tr>
+    <tr><td data-t="r4">レイアウト調整（DTP）</td><td class="n" data-t="u4">1ページ</td><td class="price">¥2,500–7,000</td><td data-t="r4n">文字のみは下限、図の中の文字差し替えは上限</td></tr>
+    <tr><td data-t="r5">動画の字幕</td><td class="n" data-t="u5">動画1分</td><td class="price">¥1,800–</td><td data-t="r5n">文字起こし込み、1言語あたり</td></tr>
+    <tr><td data-t="r6">動画の吹替（AI 音声）</td><td class="n" data-t="u6">動画1分</td><td class="price">¥3,500–</td><td data-t="r6n">1言語あたり。人の声での収録は別途</td></tr>
+    <tr><td data-t="r7">用語集の作成</td><td class="n" data-t="u7">1式</td><td class="price">¥15,000–</td><td data-t="r7n">2回目以降の訳語をそろえるため</td></tr>
+  </tbody></table></div></div>
+
+  <div class="pbox"><h3 data-t="t2">日本語化（外国語 → 日本語）</h3><div class="tbl"><table><thead><tr><th data-t="ci2">内容</th><th data-t="cu2">単位</th><th data-t="cp2">単価</th><th data-t="cn2">備考</th></tr></thead><tbody>
+    <tr><td data-t="r8">英語 → 日本語（取扱説明書・ヘルプ記事・商品ページ・教材）</td><td class="n" data-t="u8">英語1ワード</td><td class="price">¥12–18</td><td data-t="r8n">AI 下訳＋日本語ネイティブ校正</td></tr>
+    <tr><td data-t="r9">中国語・韓国語 → 日本語</td><td class="n" data-t="u9">原文1文字</td><td class="price">¥9–13</td><td></td></tr>
+    <tr><td data-t="r10">動画の日本語字幕／吹替</td><td class="n" data-t="u10">動画1分</td><td class="price">¥1,800– / ¥3,500–</td><td></td></tr>
+  </tbody></table></div></div>
+
+  <div class="pbox"><h3 data-t="t3">データ化・変換</h3><div class="tbl"><table><thead><tr><th data-t="ci3">内容</th><th data-t="cu3">単位</th><th data-t="cp3">単価</th><th data-t="cn3">備考</th></tr></thead><tbody>
+    <tr><td data-t="r11">紙・手書き図面の CAD 化</td><td class="n" data-t="u11">図面1枚</td><td class="price">¥6,000–15,000</td><td data-t="r11n">JWW・DXF・DWG。寸法・レイヤ分け込み。劣化の激しい図面は上限</td></tr>
+    <tr><td data-t="r12">CAD データの形式変換・レイヤ整理</td><td class="n" data-t="u12">図面1枚</td><td class="price">¥1,500–</td><td></td></tr>
+    <tr><td data-t="r13">紙の型紙の CAD 化</td><td class="n" data-t="u13">1型</td><td class="price">¥8,000–</td><td></td></tr>
+    <tr><td data-t="r14">紙カタログ・手書き帳票のデータ化</td><td class="n" data-t="u14">1ページ</td><td class="price">¥400–1,200</td><td data-t="r14n">AI 読み取り＋人の照合。Excel・CSV 納品</td></tr>
+    <tr><td data-t="r15">商品データの整備・モール別の形式変換</td><td class="n" data-t="u15">1品目</td><td class="price">¥80–200</td><td></td></tr>
+    <tr><td data-t="r16">顧客台帳の統合・重複整理</td><td class="n" data-t="u16">1,000件</td><td class="price">¥15,000–</td><td></td></tr>
+    <tr><td data-t="r17">間取り図の 3D 化</td><td class="n" data-t="u17">1件</td><td class="price">¥7,000–15,000</td><td data-t="r17n">JPG・PNG 納品。GLB は別途</td></tr>
+    <tr><td data-t="r18">3D モデルの軽量化・変換（AR・3D プリント用）</td><td class="n" data-t="u18">1点</td><td class="price">¥3,000–</td><td></td></tr>
+    <tr><td data-t="r19">古い写真のカラー化・高画質化</td><td class="n" data-t="u19">1枚</td><td class="price">¥300–800</td><td></td></tr>
+    <tr><td data-t="r20">音声の文字起こし／録音のノイズ除去</td><td class="n" data-t="u20">音声1分</td><td class="price">¥250– / ¥400–</td><td></td></tr>
+  </tbody></table></div></div>
+
+  <div class="pbox"><h3 data-t="t4">動画化・音声化</h3><div class="tbl"><table><thead><tr><th data-t="ci4">内容</th><th data-t="cu4">単位</th><th data-t="cp4">単価</th><th data-t="cn4">備考</th></tr></thead><tbody>
+    <tr><td data-t="r21">資料からの説明動画（図解＋AI ナレーション・字幕）</td><td class="n" data-t="u21">完成1分</td><td class="price">¥25,000–45,000</td><td data-t="r21n">台本は資料から起こします。多言語版は1言語ごとに＋¥8,000/分</td></tr>
+    <tr><td data-t="r22">画面キャプチャ型の操作説明動画</td><td class="n" data-t="u22">完成1分</td><td class="price">¥20,000–35,000</td><td></td></tr>
+    <tr><td data-t="r23">ウェビナー・講演録画の章分け・字幕・整音</td><td class="n" data-t="u23">元動画1分</td><td class="price">¥1,500–</td><td></td></tr>
+    <tr><td data-t="r24">書籍・テキストの音声化（AI 音声）</td><td class="n" data-t="u24">1文字</td><td class="price">¥1.5–</td><td data-t="r24n">人の声での収録は別途</td></tr>
+    <tr><td data-t="r25">商品ショート動画（カタログ・商品写真から）</td><td class="n" data-t="u25">1本</td><td class="price">¥4,000–</td><td data-t="r25n">100本以上から</td></tr>
+  </tbody></table></div></div>
+
+  <div class="ex">
+    <div class="calc">
+      <h3 data-t="ex_h">お見積の例：安全作業マニュアル（日本語 20,000字・40ページ）をベトナム語に</h3>
+      <dl>
+        <dt data-t="ex1">翻訳 ¥13 × 20,000字</dt><dd>¥260,000</dd>
+        <dt data-t="ex2">レイアウト調整 ¥4,000 × 40ページ</dt><dd>¥160,000</dd>
+        <dt data-t="ex3">用語集 1式</dt><dd>¥15,000</dd>
+        <dt class="tot" data-t="ex4">合計（税別）</dt><dd class="tot">¥435,000</dd>
+        <dt data-t="ex5">納期</dt><dd data-t="ex5v">15営業日</dd>
+        <dt data-t="ex6">AI を使う工程</dt><dd data-t="ex6v">下訳のみ</dd>
+      </dl>
+    </div>
+    <div class="terms">
+      <h3 data-t="tm_h" style="margin-bottom:12px">共通事項</h3>
+      <ul>
+        <li data-t="g1">お支払い：法人・事業者は着手金50%＋残額（納品後14日以内）。個人は作業開始前に全額。カード（Stripe）または銀行振込。</li>
+        <li data-t="g2">修正：納品後1回まで無償。誤訳や原文との食い違いは回数に関係なく修正。</li>
+        <li data-t="g3">特急：納期を半分にする場合 ＋30%。</li>
+        <li data-t="g4">納期の目安：翻訳は1万字で5〜7営業日、CAD 化は100枚で15〜20営業日、動画は完成5分で15〜20営業日。</li>
+        <li data-t="g5">納品形式：Word・Excel・PowerPoint・PDF・InDesign・SRT・MP4・JWW・DXF・DWG・CSV・XLIFF ほか。</li>
+        <li data-t="g6">ご用意いただくもの：元の資料のデータ、仕上がりの形式、翻訳の対象言語。用語集・図の元データがあれば仕上がりが良くなります。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="langs">
+  <span class="eyebrow">Languages</span>
+  <h2 data-t="h_l">対応言語</h2>
+  <p class="lead" data-t="l_lead">ご依頼ごとに、その言語を母語とする翻訳者を手配します。上記以外の言語もご相談ください。</p>
+  <ul class="langs" id="langs"></ul>
+</section>
+
+<section class="sec" id="company">
+  <span class="eyebrow">Company</span>
+  <h2 data-t="h_co">会社概要・特定商取引法に基づく表記</h2>
+  <div class="co" style="margin-top:28px"><div class="tbl"><table>
+    <tr><th>名称</th><td>noponopo（<span class="todo">事業者名を記入</span>）</td></tr>
+    <tr><th>代表者</th><td><span class="todo">公開前に記入</span></td></tr>
+    <tr><th>所在地</th><td><span class="todo">公開前に記入</span>（請求があれば遅滞なく開示します）</td></tr>
+    <tr><th>電話番号</th><td><span class="todo">公開前に記入</span>（請求があれば遅滞なく開示します。お問い合わせはメールでお願いします）</td></tr>
+    <tr><th>メール</th><td>contact@noponopo.com</td></tr>
+    <tr><th>事業内容</th><td>資料・コンテンツの翻訳、多言語化、データ化、動画制作の受託</td></tr>
+    <tr><th>体制</th><td>提携する翻訳者・制作者のネットワークにより、案件ごとに言語・分野に合った作業者を手配します。進行管理と検品は当方が行います。</td></tr>
+    <tr><th>販売価格</th><td>上記の単価をもとに、ご依頼ごとにお見積りした金額（税別。消費税を加えて請求します）</td></tr>
+    <tr><th>商品代金以外の必要料金</th><td>銀行振込の場合の振込手数料</td></tr>
+    <tr><th>支払方法・時期</th><td>クレジットカード（Stripe）または銀行振込。法人・事業者は着手金50%を作業開始前、残額を納品後14日以内。個人は作業開始前に全額</td></tr>
+    <tr><th>引渡時期</th><td>お見積の際にお知らせする納期まで</td></tr>
+    <tr><th>キャンセル・返金</th><td>作業開始前のキャンセルは全額返金。作業開始後は、進んだ分を差し引いて返金。納品物がご依頼の内容と違う場合は、無償で修正するか返金します。</td></tr>
+  </table></div></div>
+</section>
+
+<section class="sec" id="contact">
+  <span class="eyebrow">Contact</span>
+  <h2 data-t="h_ct">お見積・お問い合わせ</h2>
+  <p class="lead" data-t="ct_p">項目を選ぶと、右に見積依頼のメール文ができます。コピーして記載のアドレスにお送りください。1〜2営業日で、内訳のあるお見積を返信します。</p>
+  <div class="quote">
+    <div class="fcard"><form id="f">
+      <label><span data-t="l_sv">ご依頼内容</span><select id="sv"></select></label>
+      <label><span data-t="l_vol">資料の量（ページ数・文字数・分数・件数）</span><input id="vol" type="text"></label>
+      <label><span data-t="l_lg">翻訳する言語（翻訳の場合）</span><input id="lg" type="text"></label>
+      <label><span data-t="l_fmt">いまの形式と、仕上がりの形式</span><input id="fmt" type="text"></label>
+      <label><span data-t="l_due">希望の納期</span><input id="due" type="text"></label>
+      <label><span data-t="l_org">会社名（個人の方は「個人」）</span><input id="org" type="text"></label>
+      <label><span data-t="l_nm">ご担当者名</span><input id="nm" type="text"></label>
+      <label><span data-t="l_note">補足（用語集の有無、図の中の文字の扱い、NDA の要否など）</span><textarea id="note"></textarea></label>
+    </form></div>
+    <div class="out">
+      <span class="eyebrow">Quote request</span>
+      <pre id="mail"></pre>
+      <div><span data-t="o_to">送り先：</span><code>contact@noponopo.com</code></div>
+      <button type="button" class="btn" id="copy" data-t="o_copy">メール文をコピー</button>
+      <div class="status" id="status"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="faq">
+  <span class="eyebrow">FAQ</span>
+  <h2 data-t="h_faq">よくあるご質問</h2>
+  <div class="faq" id="faqs" style="margin-top:24px"></div>
+</section>
+</main>
+
+<div class="ctab band"><div class="wrap">
+  <div><h2 data-t="cb_h">まずは、お手元の資料の分量をお知らせください。</h2><p data-t="cb_p">1〜2営業日で、内訳のあるお見積をお送りします。お試し1ページは無料です。</p></div>
+  <a class="btn" href="#contact" data-t="cb_b">お見積を依頼する</a>
+</div></div>
+<footer class="band"><div class="wrap">
+  <span>© noponopo · contact@noponopo.com</span>
+  <span><a href="#company" data-t="ft">会社概要・特定商取引法に基づく表記</a></span>
+</div></footer>
+
+<script>
+(function(){
+const SV=[["マニュアル・資料の多言語化（日本語 → 外国語）","Translate manuals or documents (Japanese → other languages)"],["取扱説明書・ヘルプ・商品ページの日本語化","Translate manuals, help articles or listings into Japanese"],["動画の字幕・吹替","Video subtitles or dubbing"],["紙・手書き図面の CAD 化","Paper drawings to CAD"],["CAD データの形式変換・レイヤ整理","CAD format conversion"],["紙カタログ・帳票のデータ化","Paper catalogs or forms to data"],["商品データの整備・変換","Product data cleanup"],["顧客台帳の統合・重複整理","Customer list merging"],["間取り図の 3D 化","Floor plans to 3D"],["3D モデルの軽量化・変換","3D model optimization or conversion"],["写真のカラー化・高画質化","Photo colorizing or restoration"],["文字起こし・録音のノイズ除去","Transcription or audio cleanup"],["資料からの説明動画","Explainer video from documents"],["操作説明動画（画面キャプチャ）","Screen-capture how-to video"],["ウェビナー・講演録画の編集","Webinar or lecture editing"],["書籍・テキストの音声化","Text to audio"],["商品ショート動画","Short product videos"],["作品の海外版（小説・漫画・絵本・講座）","Overseas edition of a creative work"],["その他（補足欄に内容をご記入ください）","Other (describe in notes)"]];
+const LANGS=[["英語","English"],["中国語（簡体字）","Chinese (Simplified)"],["中国語（繁体字）","Chinese (Traditional)"],["韓国語","Korean"],["ベトナム語","Vietnamese"],["インドネシア語","Indonesian"],["タガログ語","Tagalog"],["ネパール語","Nepali"],["ミャンマー語","Burmese"],["タイ語","Thai"],["スペイン語","Spanish"],["ポルトガル語","Portuguese"],["フランス語","French"],["ドイツ語","German"],["やさしい日本語","Plain Japanese"]];
+const FAQ=[
+ ["AI はどの工程に使っていますか？","Where do you use AI?","翻訳の下訳、文字の読み取り、ナレーション、動画の下組みに使います。そのあと、ネイティブ翻訳者や専門の作業者が全文を確認し、別の担当者が検品します。安全に関わる箇所は必ず人が読みます。AI を使う工程は、お見積の際に開示します。","First-draft translation, text recognition, narration and video assembly. Native translators or specialists then review the full text, and a separate person inspects it. Safety-related passages are always read by a person. AI steps are disclosed in every quote."],
+ ["機械翻訳をそのまま納品することはありますか？","Do you ever deliver raw machine translation?","ありません。すべて人が全文を確認します。","No. Every delivery is fully reviewed by a person."],
+ ["打ち合わせや電話は必要ですか？","Are calls or meetings needed?","不要です。ご依頼から納品まで、すべてメールで進めます。確認事項はまとめてメールでお尋ねします。","No. Everything from quote to delivery happens by email."],
+ ["最低ご注文額はありますか？","Is there a minimum order?","30万円（税別）からお受けしています。複数の資料をまとめてのご依頼でも構いません。","Yes, JPY 300,000 before tax. Several documents can be combined in one order."],
+ ["発注前に品質を確認できますか？","Can I check quality before ordering?","翻訳は1ページ分、データ化は図面1枚か帳票1ページ分を無料でお作りします。お見積の際にお申し付けください。","Yes. One page of translation, or one drawing or one form sheet, free of charge. Ask when requesting a quote."],
+ ["秘密保持契約は結べますか？","Can you sign an NDA?","結べます。お客様の書式でも当方の書式でも構いません。作業者とも秘密保持を含む契約を結んでいます。","Yes, on your form or ours. Our partner workers are also bound by confidentiality agreements."],
+ ["改訂のたびに全額かかりますか？","Do updates cost the full price?","初回に用語集と翻訳メモリを作っておけば、2回目以降は変更のあった箇所だけを単価でお受けします。","If a glossary and translation memory are built on the first job, later updates are charged only for the changed parts."],
+ ["見積にはどこまで含まれますか？","What does a quote include?","翻訳・レイアウト・確認・納品形式の変換を分けた内訳、納期、AI を使う工程、修正の条件、お支払い条件を記載します。","A breakdown of translation, layout, review and format conversion, plus lead time, AI steps, revision terms and payment terms."]
+];
+const EN={n1:"Services",n2:"Quality",n3:"Security",n4:"Pricing",n5:"Company",n6:"FAQ",hcta:"Get a quote",eb:"Translation · Digitizing · Video",
+ h1:"Your documents, in the languages and formats you need.",
+ lead:"Manuals, drawings, catalogs, videos, books. Send the material you already own and we deliver it translated, digitized or turned into video. AI groundwork plus review by native translators and specialists keeps quality high and lead times short.",
+ cta1:"Request a quote",cta2:"See pricing",m1:"Quotes in 1–2 business days",m2:"One-page trial free",m3:"Email only",
+ x_in:"You send",x1:"Safety work manual",x2:"Hand-drawn layout plans",x3:"Training slides",x_out:"We deliver",y1:"Vietnamese & Indonesian editions",y2:"CAD files",y3:"Narrated training video",
+ fl0:"Process",fl1:"AI groundwork",fl2:"Native / specialist finishing",fl3:"Second-person inspection",fl4:"Delivery",
+ f1b:"15 languages",f1s:"Full review by native translators",f2b:"20+ delivery formats",f2s:"Word, InDesign, CAD, MP4, SRT and more",f3b:"Email only",f3s:"No meetings or calls, from intake to delivery",f4b:"AI use disclosed",f4s:"Step by step, in every quote",
+ h_sv:"Six services",sv_lead:"Every service starts from your existing material. We do not create from scratch; we shape what you already have into the form you need, which keeps lead times short and pricing clear.",
+ c1h:"Translation",c1p:"Japanese documents into other languages: manuals, safety training and work rules for foreign staff, and product manuals and catalogs for export.",c1l1:"AI draft + native translator review",c1l2:"Layout work including text inside figures",c1l3:"Glossary and translation memory",
+ c2h:"Into Japanese",c2p:"Manuals for imported products, software help centers, store listings and learning content, written for Japanese readers.",c2l1:"From English, Chinese and Korean",c2l2:"Full review by native Japanese editors",c2l3:"Video subtitles and dubbing",
+ c3h:"Digitizing",c3p:"Paper drawings, handwritten forms, paper catalogs, legacy CAD files, photos and recordings into usable formats.",c3l1:"Drawings to CAD (JWW, DXF, DWG)",c3l2:"Forms and catalogs to Excel/CSV",c3l3:"3D, AR and 3D-print conversion",
+ c4h:"Video & audio",c4p:"Explainer videos with diagrams and narration, built from your manuals, slides and documents. For training, product explanation and multilingual rollout.",c4l1:"Scripts written from your material",c4l2:"AI narration with subtitles",c4l3:"Webinar editing, text to audio",
+ c5h:"For creators",c5p:"Novels, manga, recipe books, course videos and picture books for overseas readers, from translation to lettering, subtitles and audio.",c5l1:"English, Chinese, Korean, Spanish and more",c5l2:"Manga lettering, picture-book relettering",c5l3:"Audiobooks",
+ c6h:"Ongoing work",c6p:"With a glossary and translation memory from the first job, later updates are charged only for the changed parts.",c6l1:"Manual revisions",c6l2:"Monthly product data and event text",c6l3:"Additional videos in a series",
+ h_q:"The same six steps on every job",q_lead:"AI steps and human steps are kept separate, and the quote says which steps use AI.",
+ tg1:"Intake",st1:"Count and quote",st1p:"We count characters, pages or minutes and quote with a breakdown",tg2:"Prep",st2:"Terminology",st2p:"Your glossary, product names and earlier translations are applied",st3:"Groundwork",st3p:"Drafts, text recognition, narration, with no-training settings",tg4:"Human",st4:"Finishing",st4p:"Native translators and specialists review and correct the full text",tg5:"Second person",st5:"Inspection",st5p:"A different person checks against the source and the format",tg6:"Delivery",st6:"Delivery & revision",st6p:"One free round after acceptance. Errors fixed regardless",
+ qc1h:"Safety-related text is read by a person, sentence by sentence",qc1p:"Safety training, machine procedures, medical and care records: where an error could cause an accident, a person reads every sentence even when AI output is used.",
+ qc2h:"Layout is our responsibility too",qc2p:"Text length changes by 50% or more between languages. We handle translation and layout together, including text inside figures and overflow.",
+ h_sec:"How we handle your files",sec_lead:"Your files are used only for your job and never shown as portfolio work.",
+ se1b:"AI with no-training settings only",se1s:"We use only services whose settings or contracts exclude training on your data. Services without that in writing are not used.",se2b:"Confidentiality agreements with workers",se2s:"Workers sign service agreements with confidentiality clauses and receive only what each job needs.",se3b:"Deleted 30 days after delivery",se3s:"Your files are deleted 30 days after delivery. Deletion reports on request.",se4b:"NDA and terms",se4s:"NDAs on your form or ours. Our full terms are attached to every quote.",
+ h_pr:"Pricing",pr_note:"Unit prices before tax. Highly technical material or small volumes may cost more. Minimum order JPY 300,000 before tax. We quote exactly after seeing your files.",
+ t1:"Translation (Japanese → other languages)",ci:"Service",cu:"Unit",cp:"Price",cn:"Notes",r1:"English, Chinese (Simplified / Traditional), Korean",u1:"per Japanese character",r1n:"AI draft + native review",r2:"Vietnamese, Indonesian, Tagalog, Nepali, Burmese, Thai",u2:"per Japanese character",r2n:"For technical-intern and skilled-worker workplaces. Plain-Japanese rewriting available",r3:"Spanish, Portuguese, French, German",u3:"per Japanese character",r4:"Layout (DTP)",u4:"per page",r4n:"Text-only at the low end; text inside figures at the high end",r5:"Video subtitles",u5:"per video minute",r5n:"Includes transcription, per language",r6:"Video dubbing (AI voice)",u6:"per video minute",r6n:"Per language. Human voice quoted separately",r7:"Glossary",u7:"per set",r7n:"Keeps terms consistent for later orders",
+ t2:"Into Japanese",ci2:"Service",cu2:"Unit",cp2:"Price",cn2:"Notes",r8:"English → Japanese (manuals, help articles, listings, learning content)",u8:"per English word",r8n:"AI draft + native Japanese review",r9:"Chinese or Korean → Japanese",u9:"per source character",r10:"Japanese subtitles / dubbing",u10:"per video minute",
+ t3:"Digitizing and conversion",ci3:"Service",cu3:"Unit",cp3:"Price",cn3:"Notes",r11:"Paper or hand-drawn drawings to CAD",u11:"per sheet",r11n:"JWW, DXF, DWG. Dimensions and layers included. Badly degraded sheets at the high end",r12:"CAD format conversion, layer cleanup",u12:"per sheet",r13:"Paper patterns to CAD",u13:"per pattern",r14:"Paper catalogs or handwritten forms to data",u14:"per page",r14n:"AI recognition + human verification. Excel or CSV",r15:"Product data cleanup, marketplace formats",u15:"per item",r16:"Customer list merging and de-duplication",u16:"per 1,000 records",r17:"Floor plans to 3D",u17:"per plan",r17n:"JPG or PNG. GLB quoted separately",r18:"3D model optimization or conversion (AR, 3D print)",u18:"per model",r19:"Old photo colorizing and restoration",u19:"per photo",r20:"Transcription / audio noise removal",u20:"per audio minute",
+ t4:"Video and audio",ci4:"Service",cu4:"Unit",cp4:"Price",cn4:"Notes",r21:"Explainer video from documents (diagrams, AI narration, subtitles)",u21:"per finished minute",r21n:"Script written from your material. Extra languages +¥8,000 per minute each",r22:"Screen-capture how-to video",u22:"per finished minute",r23:"Webinar or lecture: chapters, subtitles, audio cleanup",u23:"per source minute",r24:"Text to audio (AI voice)",u24:"per character",r24n:"Human voice quoted separately",r25:"Short product videos from catalogs or photos",u25:"per video",r25n:"From 100 videos",
+ ex_h:"Sample quote: safety work manual (20,000 Japanese characters, 40 pages) into Vietnamese",ex1:"Translation ¥13 × 20,000 characters",ex2:"Layout ¥4,000 × 40 pages",ex3:"Glossary",ex4:"Total (before tax)",ex5:"Lead time",ex5v:"15 business days",ex6:"AI steps",ex6v:"First draft only",
+ tm_h:"General terms",g1:"Payment: companies pay 50% upfront and the balance within 14 days of delivery. Individuals pay in full before work starts. Card (Stripe) or bank transfer.",g2:"Revisions: one free round after delivery. Errors against the source are fixed regardless.",g3:"Rush: +30% to halve the lead time.",g4:"Typical lead times: 10,000 characters, 5–7 business days; 100 drawings to CAD, 15–20; a 5-minute video, 15–20.",g5:"Formats: Word, Excel, PowerPoint, PDF, InDesign, SRT, MP4, JWW, DXF, DWG, CSV, XLIFF and more.",g6:"What we need: source files, the finished format, and target languages. A glossary and figure source files improve the result.",
+ h_l:"Languages",l_lead:"For each job we assign a native speaker of the target language. Ask about languages not listed.",h_co:"Company and legal notice",
+ h_ct:"Quote and contact",ct_p:"Fill in the fields and an email draft appears on the right. Copy it and send it to the address shown. We reply with an itemized quote within 1–2 business days.",
+ l_sv:"What you need",l_vol:"Volume (pages, characters, minutes, items)",l_lg:"Target languages (for translation)",l_fmt:"Current format and finished format",l_due:"Preferred deadline",l_org:"Company (or \"individual\")",l_nm:"Contact name",l_note:"Notes (glossary, text inside figures, NDA, etc.)",
+ o_to:"Send to: ",o_copy:"Copy email text",h_faq:"FAQ",cb_h:"Start by telling us the size of your material.",cb_p:"You will have an itemized quote within 1–2 business days. A one-page trial is free.",cb_b:"Request a quote",ft:"Company and legal notice"};
+const JA={};document.querySelectorAll("[data-t]").forEach(e=>JA[e.dataset.t]=e.dataset.html?e.innerHTML:e.textContent);
+let lang="ja";const L=(a,b)=>lang==="ja"?a:b;const $=i=>document.getElementById(i);
+function fill(){const c=$("sv").value;$("sv").innerHTML=SV.map((s,i)=>`<option value="${i}">${L(s[0],s[1])}</option>`).join("");if(c)$("sv").value=c;
+ $("langs").innerHTML=LANGS.map(l=>`<li>${L(l[0],l[1])}</li>`).join("");
+ $("faqs").innerHTML=FAQ.map(f=>`<details><summary>${L(f[0],f[1])}</summary><p>${L(f[2],f[3])}</p></details>`).join("")}
+function mail(){const s=SV[+$("sv").value||0];const v=i=>$(i).value.trim()||L("（未記入）","(not provided)");
+ $("mail").textContent=lang==="ja"?`件名：見積依頼｜${s[0]}
+
+noponopo ご担当者様
+
+以下の内容で見積をお願いします。
+
+・ご依頼内容：${s[0]}
+・資料の量：${v("vol")}
+・翻訳する言語：${v("lg")}
+・いまの形式と仕上がりの形式：${v("fmt")}
+・希望の納期：${v("due")}
+・会社名：${v("org")}
+・ご担当者名：${v("nm")}
+・補足：${v("note")}
+
+よろしくお願いいたします。`:`Subject: Quote request | ${s[1]}
+
+Hello noponopo,
+
+Please send a quote for the following.
+
+- Service: ${s[1]}
+- Volume: ${v("vol")}
+- Target languages: ${v("lg")}
+- Current and finished format: ${v("fmt")}
+- Preferred deadline: ${v("due")}
+- Company: ${v("org")}
+- Contact name: ${v("nm")}
+- Notes: ${v("note")}
+
+Thank you.`}
+function setLang(l){lang=l;document.documentElement.lang=l;$("ja").setAttribute("aria-pressed",l==="ja");$("en").setAttribute("aria-pressed",l==="en");
+ document.querySelectorAll("[data-t]").forEach(e=>{const v=l==="ja"?JA[e.dataset.t]:(EN[e.dataset.t]??JA[e.dataset.t]);if(e.dataset.html&&l==="ja")e.innerHTML=v;else e.textContent=v});fill();mail();try{localStorage.setItem("nopo_lang",l)}catch(e){}}
+$("ja").onclick=()=>setLang("ja");$("en").onclick=()=>setLang("en");
+$("f").addEventListener("input",mail);$("f").addEventListener("submit",e=>e.preventDefault());
+$("copy").onclick=()=>{const t=$("mail").textContent;const ok=()=>$("status").textContent=L("コピーしました。","Copied.");
+ const sel=()=>{const r=document.createRange();r.selectNodeContents($("mail"));const g=getSelection();g.removeAllRanges();g.addRange(r);$("status").textContent=L("文面を選択しました。長押しか Ctrl+C でコピーしてください。","Text selected. Copy with Ctrl+C or a long press.")};
+ try{navigator.clipboard.writeText(t).then(ok,sel)}catch(e){sel()}};
+let s="ja";try{s=localStorage.getItem("nopo_lang")||"ja"}catch(e){}
+setLang(s==="en"?"en":"ja");
+})();
+</script>
